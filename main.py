@@ -49,7 +49,7 @@ class RootWidget(BoxLayout):
 
     def selected_file(self, *args):
         print("args=", args[1])
-        plot_values(args[1])
+        plot_values(args[1][0])
 
 
 class DemoApp(App):

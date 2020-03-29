@@ -9,7 +9,7 @@ totals = []
 extrapolation = 1000
 
 def plot_values(filepath):
-    str(filepath)
+
     try:
         wb = openpyxl.load_workbook(filepath)
         print(filepath)
