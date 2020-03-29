@@ -13,30 +13,37 @@ from kivy.lang import Builder
 Builder.load_string('''
 #:kivy 1.10.0
 
-<SaveFile>:
-    title: 'Save File'
+<SelectFile>:
+    title: 'Modify parameters then select your source file'
 
     # FileChooserLayout
     BoxLayout:
         orientation: 'vertical'
 
         # ButtonArea
-        BoxLayout:
+        FloatLayout:
             orientation: 'horizontal'
             spacing: 50
-            size_hint: (.5,.5)
-            pos_hint: {'center_x': 0.5, 'center_y': 0.5}
 
             FileChooserListView:
+                size_hint: 0.5, 1
+                pos_hint: {'center_x': 0.75, 'center_y': 0.5}
                 on_selection: 
                     app.root.selected_file(*args)
+                    
+        #Polynomial Power
+        FloatLayout:
+            Button:
+                pos_hint: {'center_x': 0.25, 'center_y': 0.25}
+                size_hint: .2, .2
+                text: 'Button 1'
 
 <RootWidget>:
 
 ''')
 
 
-class SaveFile(Popup):
+class SelectFile(Popup):
     pass
 
 
@@ -44,11 +51,10 @@ class RootWidget(BoxLayout):
 
     def __init__(self, **kwargs):
         super(RootWidget, self).__init__(**kwargs)
-        filepop = SaveFile()
+        filepop = SelectFile()
         filepop.open()
 
     def selected_file(self, *args):
-        print("args=", args[1])
         plot_values(args[1][0])
 
 
