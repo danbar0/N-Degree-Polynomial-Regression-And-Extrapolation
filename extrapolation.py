@@ -28,6 +28,7 @@ def plot_values(filepath):
     except TypeError:
         print("File is incorrectly formatted...")
         return
+
     except:
         e = sys.exc_info()[0]
         print("Error: " + str(e))
