@@ -25,6 +25,16 @@ Builder.load_string('''
 
 <SelectionMenu>:
     FloatLayout:
+        # Background
+        Image:
+            source: 'background.png'
+            size: self.texture_size
+            
+        # User Directions
+        Label:
+            text: "Tune parameters and select a source file"
+            pos_hint: {'center_x': 0, 'center_y': 0.25}
+            
         Button:
             pos_hint:   {'center_x': 0.25, 'center_y': 0.25}
             size_hint:  .05, .05
@@ -73,6 +83,7 @@ class SelectionMenu(FloatLayout):
     def __init__(self, **kwargs):
         super(SelectionMenu, self).__init__(**kwargs)
         self.source_file_path = ""
+        self.polynomial_degree = 0
 
     def poly_degree(self, widget, message, *args):
         widget.text = message[2]
