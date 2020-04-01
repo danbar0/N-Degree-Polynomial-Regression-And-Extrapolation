@@ -10,9 +10,9 @@ totals = []
 extrapolation = 1000
 
 
-def plot_values(filepath):
+def plot_values(file_path):
     try:
-        wb = openpyxl.load_workbook(filepath)
+        wb = openpyxl.load_workbook(file_path)
     except openpyxl.utils.exceptions.InvalidFileException:
         print("Invalid file name...")
         return
@@ -34,7 +34,6 @@ def plot_values(filepath):
         print("Error: " + str(e))
         print("Unknown error...")
         return
-
 
     print(totals)
 

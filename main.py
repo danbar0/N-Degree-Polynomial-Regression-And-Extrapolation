@@ -15,10 +15,16 @@ from kivy.lang import Builder
 Builder.load_string('''
 #:kivy 1.10.0
 
-<PolynomialPowerSelector>:
+<StartButton>:
     FloatLayout:
-        pos_hint:   {'center_x': 0.3, 'center_y': 0.9}
-        
+        Button:
+            pos_hint:   {'center_x': 0.3, 'center_y': 0.25}
+            size_hint:  (0.1, 0.1)
+            text:       '-'
+            on_press: 
+
+<SelectionMenu>:
+    FloatLayout:
         Button:
             pos_hint:   {'center_x': 0.25, 'center_y': 0.25}
             size_hint:  .05, .05
@@ -30,17 +36,15 @@ Builder.load_string('''
             text:       '-'
             
         Label:
-            pos_hint:   {'center_x': 0.4, 'center_y': 0.25}
+            pos_hint:   {'_x': 0.4, 'center_y': 0.25}
             size_hint:  .05, .05
             text:       'test'
-        
-    
-<SelectFile>:
-    FloatLayout:
+            
         FileChooserListView:
             size_hint:      0.5, 1
             pos_hint:       {'center_x': 0.75, 'center_y': 0.5}
             on_selection:   root.selected_file(*args)
+
             
 <ExceptionPopup>:
     Label:
@@ -54,10 +58,10 @@ Builder.load_string('''
         size: root.size
         pos: root.pos
         
-        SelectFile:
-        PolynomialPowerSelector:
+        SelectionMenu:
             
 ''')
+
 
 class ExceptionPopup(Popup):
 
@@ -65,18 +69,23 @@ class ExceptionPopup(Popup):
         pass
 
 
-class PolynomialPowerSelector(FloatLayout):
+class SelectionMenu(FloatLayout):
+    def __init__(self, **kwargs):
+        super(SelectionMenu, self).__init__(**kwargs)
+        self.source_file_path = ""
 
     def poly_degree(self, widget, message, *args):
         widget.text = message[2]
 
-
-class SelectFile(FloatLayout):
-
     def selected_file(self, *args):
-        plot_values(args[1][0])
+        self.source_file_path = args[1][0]
 
+    def launch_plotting(self):
+        if self.source_file_path is not "":
+            plot_values(self.source_file_path)
 
+        # todo
+        #  make a popup for no file selected
 
 
 class RootWidget(Widget):
