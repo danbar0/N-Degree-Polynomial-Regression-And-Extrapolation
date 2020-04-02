@@ -11,6 +11,7 @@ from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
 from kivy.lang import Builder
+from kivy.graphics import *
 
 Builder.load_string('''
 #:kivy 1.10.0
@@ -32,8 +33,16 @@ Builder.load_string('''
             
         # User Directions
         Label:
-            text: "Tune parameters and select a source file"
-            pos_hint: {'center_x': 0, 'center_y': 0.25}
+            text: "Set parameters and select a source file"
+            pos_hint: {'center_x': 0.2, 'center_y': 0.95}
+            
+        # Launch Button
+        Button:
+            pos: (20, 20)
+            #pos_hint: {'x':.2, 'y':.2}
+            size_hint:  .47, .1
+            text:       'Run'
+            on_release: root.launch_plotting()
             
         Button:
             pos_hint:   {'center_x': 0.25, 'center_y': 0.25}
