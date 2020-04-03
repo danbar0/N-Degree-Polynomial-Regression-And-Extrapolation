@@ -10,6 +10,8 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
+from kivy.uix.button import Button
+from kivy.uix.label import Label
 from kivy.lang import Builder
 from kivy.graphics import *
 
@@ -22,7 +24,7 @@ Builder.load_string('''
             pos_hint:   {'center_x': 0.3, 'center_y': 0.25}
             size_hint:  (0.1, 0.1)
             text:       '-'
-            on_press: 
+            
 
 <SelectionMenu>:
     FloatLayout:
@@ -48,6 +50,7 @@ Builder.load_string('''
             pos_hint:   {'center_x': 0.25, 'center_y': 0.25}
             size_hint:  .05, .05
             text:       '+'
+            on_release: root.popup_reference.create_popup_with_text("test")
             
         Button:
             pos_hint:   {'center_x': 0.3, 'center_y': 0.25}
@@ -65,12 +68,17 @@ Builder.load_string('''
             on_selection:   root.selected_file(*args)
 
             
-<ExceptionPopup>:
+<MessagePopup>:
     Label:
         text: "test"
-    Button:
-        text: "close"
-        on_release: root.close_popup(*args)
+        size_hint: 0.6, 0.2
+        pos_hint: {"x":0.2, "top":1}
+        
+    # Button:
+        # text: "Close"
+        # size_hint: 0.8, 0.2
+        # pos_hint: {"x":0.1, "y":0.1}
+        # on_release: root.close_popup()
                 
 <RootWidget>:
     FloatLayout:
@@ -82,13 +90,25 @@ Builder.load_string('''
 ''')
 
 
-class ExceptionPopup(Popup):
+class MessagePopup(FloatLayout):
 
-    def close_popup(self):
-        pass
+    def create_popup_with_text(self, message):
+        box = BoxLayout(orientation='vertical', padding=10)
+        box.add_widget(Label(text=message))
+        popup = Popup(title=message,
+                            content=box,
+                            size_hint=(None, None),
+                            size=(400, 400))
 
+        box.add_widget(Button(text="Close",
+                        size_hint=(0.8, 0.2),
+                        pos_hint={"x":0.1, "y":0.1},
+                        on_release=popup.dismiss))
+        popup.open()
 
 class SelectionMenu(FloatLayout):
+    popup_reference = MessagePopup()
+
     def __init__(self, **kwargs):
         super(SelectionMenu, self).__init__(**kwargs)
         self.source_file_path = ""
@@ -103,6 +123,8 @@ class SelectionMenu(FloatLayout):
     def launch_plotting(self):
         if self.source_file_path is not "":
             plot_values(self.source_file_path)
+        else:
+            self.popup_reference.create_popup_with_text("No file selected!")
 
         # todo
         #  make a popup for no file selected
