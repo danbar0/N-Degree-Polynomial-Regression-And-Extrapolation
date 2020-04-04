@@ -13,6 +13,7 @@ from kivy.uix.popup import Popup
 from kivy.factory import Factory
 from kivy.uix.button import Button
 from kivy.uix.label import Label
+from kivy.properties import StringProperty
 from kivy.lang import Builder
 from kivy.graphics import *
 
@@ -88,7 +89,6 @@ Builder.load_string('''
             size_hint: 0.8, 0.2
             pos_hint: {'x': 0.1, 'y': 0.1}
             on_release: root.dismiss()
-    
                 
 <RootWidget>:
     FloatLayout:
@@ -101,35 +101,19 @@ Builder.load_string('''
 
 
 class MessagePopup(Popup):
-    message_text = ""
-    def create_popup_with_text(self, message):
-        # box = BoxLayout(orientation='vertical', padding=10)
-        # popup = Popup(title="Message",
-        #                 title_size=30,
-        #                 title_align='center',
-        #                 content=box,
-        #                 size_hint=(None, None),
-        #                 size=(400, 400))
-        #
-        # box.add_widget(Label(text=message, text_size=(box.center_x,box.center_y)))
-        #
-        # box.add_widget(Button(text="Close",
-        #                 size_hint=(0.8, 0.2),
-        #                 pos_hint={"x":0.1, "y":0.1},
-        #                 on_release=popup.dismiss))
+    message_text = StringProperty()
+
+    def __init__(self, message, **kwargs):
+        super(MessagePopup, self).__init__(**kwargs)
         self.message_text = message
-        popup = MessagePopup()
-        # popup = Popup(title="Message",
-        #                 title_size=30,
-        #                 title_align='center',
-        #                 content=show,
-        #                 size_hint=(None, None),
-        #                 size=(400, 400))
+
+    @staticmethod
+    def create_popup_with_text(message):
+        popup = MessagePopup(message)
         popup.open()
 
 
 class SelectionMenu(FloatLayout):
-    popup_ref = MessagePopup()
 
     def __init__(self, **kwargs):
         super(SelectionMenu, self).__init__(**kwargs)
@@ -143,11 +127,13 @@ class SelectionMenu(FloatLayout):
         self.source_file_path = args[1][0]
 
     def launch_plotting(self):
-        if self.source_file_path is not "":
-            plot_values(self.source_file_path)
-        else:
-            self.popup_ref.create_popup_with_text("Please select a source file before running")
-
+        try:
+            if self.source_file_path is not "":
+                plot_values(self.source_file_path)
+            else:
+                MessagePopup.create_popup_with_text("Please select a source file before running")
+        except Exception as e:
+            MessagePopup.create_popup_with_text("Error: " + str(e))
 
 class RootWidget(Widget):
 

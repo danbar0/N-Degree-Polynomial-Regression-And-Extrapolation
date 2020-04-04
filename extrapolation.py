@@ -9,13 +9,20 @@ totals = []
 
 extrapolation = 1000
 
+error_string = {
+    "bad_file_name":    "Invalid file name",
+    "bad_file_format":  "File is incorrectly formatted",
+    "bad_interp":       "Interpolation processing error",
+    "pyplot_failure":   "Pyplot failed to run properly",
+
+    "unknown_error":    "Unknown error: "
+}
 
 def plot_values(file_path):
     try:
         wb = openpyxl.load_workbook(file_path)
     except openpyxl.utils.exceptions.InvalidFileException:
-        print("Invalid file name...")
-        return
+        raise Exception(error_string["bad_file_name"])
 
     sheet = wb.get_sheet_by_name('Sheet1')
 
@@ -26,14 +33,11 @@ def plot_values(file_path):
             totals.append(sheet.cell(row=i, column=2).value)
 
     except TypeError:
-        print("File is incorrectly formatted...")
-        return
+        raise Exception(error_string["bad_file_format"])
 
-    except:
+    else:
         e = sys.exc_info()[0]
-        print("Error: " + str(e))
-        print("Unknown error...")
-        return
+        raise Exception(error_string["unknown_error"] + str(e))
 
     print(totals)
 
@@ -52,8 +56,7 @@ def plot_values(file_path):
         dd = mdates.num2date(xx)
 
     except:
-        print("Interpolation processing failure...")
-        return
+        raise Exception(error_string["bad_interp"])
 
     try:
         cx.plot(dd, p4(xx), '-g')
@@ -66,5 +69,5 @@ def plot_values(file_path):
     except:
         e = sys.exc_info()[0]
         print("Error: " + str(e))
-        print("Pyplot failure, unable to plot data...")
-        return
+        raise Exception(error_string["pyplot_failure"])
+
