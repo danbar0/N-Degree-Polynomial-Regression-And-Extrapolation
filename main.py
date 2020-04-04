@@ -10,6 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
+from kivy.factory import Factory
 from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.lang import Builder
@@ -17,6 +18,7 @@ from kivy.graphics import *
 
 Builder.load_string('''
 #:kivy 1.10.0
+#:import Factory kivy.factory.Factory
 
 <StartButton>:
     FloatLayout:
@@ -65,20 +67,28 @@ Builder.load_string('''
         FileChooserListView:
             size_hint:      0.5, 1
             pos_hint:       {'center_x': 0.75, 'center_y': 0.5}
-            on_selection:   root.selected_file(*args)
-
+            on_selection:   root.set_selected_file(*args)
             
 <MessagePopup>:
-    Label:
-        text: "test"
-        size_hint: 0.6, 0.2
-        pos_hint: {"x":0.2, "top":1}
+    title: 'Message'
+    title_size: 30
+    title_align: 'center'
+    size_hint: (None, None)
+    size: 400, 400
+    
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+            
+        Label:
+            text: root.message_text
         
-    # Button:
-        # text: "Close"
-        # size_hint: 0.8, 0.2
-        # pos_hint: {"x":0.1, "y":0.1}
-        # on_release: root.close_popup()
+        Button: 
+            text: 'Close'
+            size_hint: 0.8, 0.2
+            pos_hint: {'x': 0.1, 'y': 0.1}
+            on_release: root.dismiss()
+    
                 
 <RootWidget>:
     FloatLayout:
@@ -90,24 +100,36 @@ Builder.load_string('''
 ''')
 
 
-class MessagePopup(FloatLayout):
-
+class MessagePopup(Popup):
+    message_text = ""
     def create_popup_with_text(self, message):
-        box = BoxLayout(orientation='vertical', padding=10)
-        box.add_widget(Label(text=message))
-        popup = Popup(title=message,
-                            content=box,
-                            size_hint=(None, None),
-                            size=(400, 400))
-
-        box.add_widget(Button(text="Close",
-                        size_hint=(0.8, 0.2),
-                        pos_hint={"x":0.1, "y":0.1},
-                        on_release=popup.dismiss))
+        # box = BoxLayout(orientation='vertical', padding=10)
+        # popup = Popup(title="Message",
+        #                 title_size=30,
+        #                 title_align='center',
+        #                 content=box,
+        #                 size_hint=(None, None),
+        #                 size=(400, 400))
+        #
+        # box.add_widget(Label(text=message, text_size=(box.center_x,box.center_y)))
+        #
+        # box.add_widget(Button(text="Close",
+        #                 size_hint=(0.8, 0.2),
+        #                 pos_hint={"x":0.1, "y":0.1},
+        #                 on_release=popup.dismiss))
+        self.message_text = message
+        popup = MessagePopup()
+        # popup = Popup(title="Message",
+        #                 title_size=30,
+        #                 title_align='center',
+        #                 content=show,
+        #                 size_hint=(None, None),
+        #                 size=(400, 400))
         popup.open()
 
+
 class SelectionMenu(FloatLayout):
-    popup_reference = MessagePopup()
+    popup_ref = MessagePopup()
 
     def __init__(self, **kwargs):
         super(SelectionMenu, self).__init__(**kwargs)
@@ -117,17 +139,14 @@ class SelectionMenu(FloatLayout):
     def poly_degree(self, widget, message, *args):
         widget.text = message[2]
 
-    def selected_file(self, *args):
+    def set_selected_file(self, *args):
         self.source_file_path = args[1][0]
 
     def launch_plotting(self):
         if self.source_file_path is not "":
             plot_values(self.source_file_path)
         else:
-            self.popup_reference.create_popup_with_text("No file selected!")
-
-        # todo
-        #  make a popup for no file selected
+            self.popup_ref.create_popup_with_text("Please select a source file before running")
 
 
 class RootWidget(Widget):
