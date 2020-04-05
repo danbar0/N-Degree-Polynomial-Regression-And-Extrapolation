@@ -76,13 +76,19 @@ Builder.load_string('''
     title_align: 'center'
     size_hint: (None, None)
     size: 400, 400
+    auto_dismiss: False
     
-    BoxLayout:
+    FloatLayout:
         orientation: 'vertical'
         padding: 10
             
         Label:
             text: root.message_text
+            size_hint: 0.8, 0.2
+            pos_hint: {'x': 0.1, 'y': 0.7}
+            text_size: self.width, None
+            height: self.texture_size[1]
+            halign: 'center'
         
         Button: 
             text: 'Close'
@@ -114,7 +120,6 @@ class MessagePopup(Popup):
 
 
 class SelectionMenu(FloatLayout):
-
     def __init__(self, **kwargs):
         super(SelectionMenu, self).__init__(**kwargs)
         self.source_file_path = ""
@@ -124,7 +129,12 @@ class SelectionMenu(FloatLayout):
         widget.text = message[2]
 
     def set_selected_file(self, *args):
-        self.source_file_path = args[1][0]
+        try:
+            print(args[1][0])
+            self.source_file_path = args[1][0]
+        except IndexError:
+            print("Index error??")
+            pass
 
     def launch_plotting(self):
         try:
@@ -135,8 +145,8 @@ class SelectionMenu(FloatLayout):
         except Exception as e:
             MessagePopup.create_popup_with_text("Error: " + str(e))
 
-class RootWidget(Widget):
 
+class RootWidget(Widget):
     def __init__(self, **kwargs):
         super(RootWidget, self).__init__(**kwargs)
 

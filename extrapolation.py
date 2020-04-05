@@ -18,6 +18,7 @@ error_string = {
     "unknown_error":    "Unknown error: "
 }
 
+
 def plot_values(file_path):
     try:
         wb = openpyxl.load_workbook(file_path)
