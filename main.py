@@ -1,20 +1,15 @@
-from extrapolation import plot_values
-
-try:
-    import kivy
-except ImportError:
-    raise ImportError("You don't have Kivy installed!")
+import kivy
+kivy.require('1.10.1')
 
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.floatlayout import FloatLayout
 from kivy.uix.widget import Widget
 from kivy.uix.popup import Popup
-from kivy.factory import Factory
-from kivy.uix.button import Button
-from kivy.uix.label import Label
 from kivy.properties import StringProperty
 from kivy.lang import Builder
+from extrapolation import plot_values
+
 
 Builder.load_file('kivySource.kv')
 
