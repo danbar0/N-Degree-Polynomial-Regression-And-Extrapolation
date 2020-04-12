@@ -71,8 +71,9 @@ def plot_values(file_path, degree=2, extrapolated_days=0):
         raise Exception(error_string["bad_interp"])
 
     try:
+        cx.plot(dates, y, '.k')
         cx.plot(dd, p4(xx), '-g')
-        cx.plot(dates, y, '+', color='b', label='blub')
+        # cx.plot(dates, y, '+', color='b', label='blub')
 
         cx.grid()
         cx.set_ylim(0, p4(xx).max())
