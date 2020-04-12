@@ -2,24 +2,28 @@ import openpyxl
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
+from datetime import datetime
+from datetime import timedelta
+from datetime import date
 import sys
-
-dates = []
-totals = []
-
-extrapolation = 1000
 
 error_string = {
     "bad_file_name":    "Invalid file name",
     "bad_file_format":  "File is incorrectly formatted",
     "bad_interp":       "Interpolation processing error",
-    "pyplot_failure":   "Pyplot failed to run properly",
+    "pyplot_failure":   "Plotting failed to run properly",
 
     "unknown_error":    "Unknown error: "
 }
 
+def __get_future_date(base_date, additional_days):
+    future_date = base_date + timedelta(additional_days)
+    return future_date
 
-def plot_values(file_path):
+def plot_values(file_path, degree=2, extrapolated_days=0):
+    dates = []
+    totals = []
+
     try:
         wb = openpyxl.load_workbook(file_path)
     except openpyxl.utils.exceptions.InvalidFileException:
@@ -36,7 +40,7 @@ def plot_values(file_path):
     except TypeError:
         raise Exception(error_string["bad_file_format"])
 
-    else:
+    except:
         e = sys.exc_info()[0]
         raise Exception(error_string["unknown_error"] + str(e))
 
@@ -44,19 +48,26 @@ def plot_values(file_path):
 
     try:
         x = mdates.date2num(dates)
+        print(x)
         y = totals
 
-        poly_degree = 2
-        z4 = np.polyfit(x, totals, poly_degree)
+        z4 = np.polyfit(x, totals, degree)
         p4 = np.poly1d(z4)
 
         print(p4)
 
         fig, cx = plt.subplots()
-        xx = np.linspace(x.min(), x.max(), 1000)
+
+        if extrapolated_days > 0:
+            future_date = mdates.date2num(__get_future_date(dates[-1], extrapolated_days))
+            difference = future_date - x.max()
+
+        xx = np.linspace(x.min(), x.max() + difference)
         dd = mdates.num2date(xx)
 
     except:
+        e = sys.exc_info()[0]
+        print("Error: " + str(e))
         raise Exception(error_string["bad_interp"])
 
     try:
@@ -64,7 +75,7 @@ def plot_values(file_path):
         cx.plot(dates, y, '+', color='b', label='blub')
 
         cx.grid()
-        cx.set_ylim(0, 100000)
+        cx.set_ylim(0, p4(xx).max())
         plt.show()
 
     except:

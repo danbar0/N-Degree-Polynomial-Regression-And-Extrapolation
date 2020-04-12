@@ -15,7 +15,6 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.properties import StringProperty
 from kivy.lang import Builder
-from kivy.graphics import *
 
 Builder.load_string('''
 #:kivy 1.10.0
@@ -53,7 +52,6 @@ Builder.load_string('''
             pos_hint:   {'center_x': 0.25, 'center_y': 0.25}
             size_hint:  .05, .05
             text:       '+'
-            on_release: root.popup_reference.create_popup_with_text("test")
             
         Button:
             pos_hint:   {'center_x': 0.3, 'center_y': 0.25}
@@ -109,7 +107,7 @@ Builder.load_string('''
 class MessagePopup(Popup):
     message_text = StringProperty()
 
-    def __init__(self, message, **kwargs):
+    def __init__(self, message="null", **kwargs):
         super(MessagePopup, self).__init__(**kwargs)
         self.message_text = message
 
@@ -137,13 +135,15 @@ class SelectionMenu(FloatLayout):
             pass
 
     def launch_plotting(self):
-        try:
-            if self.source_file_path is not "":
-                plot_values(self.source_file_path)
-            else:
-                MessagePopup.create_popup_with_text("Please select a source file before running")
-        except Exception as e:
-            MessagePopup.create_popup_with_text("Error: " + str(e))
+        file_path = 'C:/Users/Dan/Dropbox/Savings.xlsx'
+        plot_values(file_path, extrapolated_days=365*4)
+        # try:
+        #     if self.source_file_path is not "":
+        #         plot_values(self.source_file_path, extrapolated_days=1000)
+        #     else:
+        #         MessagePopup.create_popup_with_text("Please select a source file before running")
+        # except Exception as e:
+        #     MessagePopup.create_popup_with_text("Error: " + str(e))
 
 
 class RootWidget(Widget):
