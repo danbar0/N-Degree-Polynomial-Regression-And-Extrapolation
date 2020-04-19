@@ -44,26 +44,22 @@ def plot_values(file_path, degree=2, extrapolated_days=0):
         e = sys.exc_info()[0]
         raise Exception(error_string["unknown_error"] + str(e))
 
-    print(totals)
-
     try:
-        x = mdates.date2num(dates)
-        print(x)
-        y = totals
+        x_data = mdates.date2num(dates)
+        y_data = totals
 
-        z4 = np.polyfit(x, totals, degree)
-        p4 = np.poly1d(z4)
-
-        print(p4)
+        # Generate polynomial
+        polynomial_coefficients = np.polyfit(x_data, y_data, degree)
+        f = np.poly1d(polynomial_coefficients)
 
         fig, cx = plt.subplots()
 
         if extrapolated_days > 0:
             future_date = mdates.date2num(__get_future_date(dates[-1], extrapolated_days))
-            difference = future_date - x.max()
+            difference = future_date - x_data.max()
 
-        xx = np.linspace(x.min(), x.max() + difference)
-        dd = mdates.num2date(xx)
+        x = np.linspace(x_data.min(), x_data.max() + difference)
+        datetime_dates = mdates.num2date(x)
 
     except:
         e = sys.exc_info()[0]
@@ -71,12 +67,10 @@ def plot_values(file_path, degree=2, extrapolated_days=0):
         raise Exception(error_string["bad_interp"])
 
     try:
-        cx.plot(dates, y, '.k')
-        cx.plot(dd, p4(xx), '-g')
-        # cx.plot(dates, y, '+', color='b', label='blub')
-
+        cx.plot(dates, y_data, '.k')
+        cx.plot(datetime_dates, f(x), '-g')
         cx.grid()
-        cx.set_ylim(0, p4(xx).max())
+        cx.set_ylim(0, f(x).max())
         plt.show()
 
     except:

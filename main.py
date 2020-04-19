@@ -45,8 +45,9 @@ class SelectionMenu(FloatLayout):
             pass
 
     def launch_plotting(self):
+        # todo Make feature that lets user enter target net worth
         file_path = 'C:/Users/Dan/Dropbox/Savings.xlsx'
-        plot_values(file_path, extrapolated_days=365*4)
+        plot_values(file_path, extrapolated_days=365*5)
         # try:
         #     if self.source_file_path is not "":
         #         plot_values(self.source_file_path, extrapolated_days=1000)
