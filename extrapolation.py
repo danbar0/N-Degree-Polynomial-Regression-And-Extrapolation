@@ -29,6 +29,7 @@ def plot_values(file_path, degree=2, extrapolated_days=0):
     except openpyxl.utils.exceptions.InvalidFileException:
         raise Exception(error_string["bad_file_name"])
 
+    # TODO need to pass in sheet name
     sheet = wb.get_sheet_by_name('Sheet1')
 
     try:
@@ -45,6 +46,7 @@ def plot_values(file_path, degree=2, extrapolated_days=0):
         raise Exception(error_string["unknown_error"] + str(e))
 
     try:
+        print(totals)
         x_data = mdates.date2num(dates)
         y_data = totals
 

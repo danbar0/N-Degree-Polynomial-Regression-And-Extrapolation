@@ -1,13 +1,6 @@
 #:kivy 1.10.0
 #:import Factory kivy.factory.Factory
-
-<StartButton>:
-    FloatLayout:
-        Button:
-            pos_hint:   {'center_x': 0.3, 'center_y': 0.25}
-            size_hint:  (0.1, 0.1)
-            text:       '-'
-
+#:import TextInput kivy.uix.textinput
 
 <SelectionMenu>:
     FloatLayout:
@@ -43,6 +36,13 @@
             pos_hint:   {'_x': 0.4, 'center_y': 0.25}
             size_hint:  .05, .05
             text:       'test'
+
+        TextInput:
+            id: textId
+            multiline: False
+            pos_hint: {'_x': 0.4, 'center_y': 0.25}
+            size_hint: 0.5, 0.05
+            on_text_validate: root.set_days_to_extrapolate(textId.text)
 
         FileChooserListView:
             size_hint:      0.5, 1
