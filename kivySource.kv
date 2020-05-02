@@ -4,47 +4,50 @@
 
 <SelectionMenu>:
     FloatLayout:
-        # Background
         Image:
+            id: backgroundImage
             source: 'background.png'
             size: self.texture_size
 
-        # User Directions
         Label:
+            id: directionsString
             text: "Set parameters and select a source file"
             pos_hint: {'center_x': 0.2, 'center_y': 0.95}
 
-        # Launch Button
         Button:
+            id: launchButton
             pos: (20, 20)
             #pos_hint: {'x':.2, 'y':.2}
             size_hint:  .47, .1
             text:       'Run'
             on_release: root.launch_plotting()
 
-        Button:
-            pos_hint:   {'center_x': 0.25, 'center_y': 0.25}
-            size_hint:  .05, .05
-            text:       '+'
-
-        Button:
-            pos_hint:   {'center_x': 0.3, 'center_y': 0.25}
-            size_hint:  .05, .05
-            text:       '-'
-
         Label:
-            pos_hint:   {'_x': 0.4, 'center_y': 0.25}
-            size_hint:  .05, .05
-            text:       'test'
+            id: sheetEntryLabel
+            text: "Excel sheet name:"
+            pos_hint: {'center_x': 0.1, 'center_y': 0.55}
 
         TextInput:
-            id: textId
+            id: sheetField
+            multiline: False
+            pos_hint: {'_x': 0.2, 'center_y': 0.5}
+            size_hint: 0.5, 0.05
+            on_text_validate: root.set_sheet_name(sheetField.text)
+
+        Label:
+            id: extrapolationEntryLabel
+            text: "Extrapolated days:"
+            pos_hint: {'center_x': 0.1, 'center_y': 0.3}
+
+        TextInput:
+            id: exrapolationDaysField
             multiline: False
             pos_hint: {'_x': 0.4, 'center_y': 0.25}
             size_hint: 0.5, 0.05
-            on_text_validate: root.set_days_to_extrapolate(textId.text)
+            on_text_validate: root.set_days_to_extrapolate(exrapolationDaysField.text)
 
         FileChooserListView:
+            id: filePathChooser
             size_hint:      0.5, 1
             pos_hint:       {'center_x': 0.75, 'center_y': 0.5}
             on_selection:   root.set_selected_file(*args)

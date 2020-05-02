@@ -11,6 +11,7 @@ error_string = {
     "bad_file_name":    "Invalid file name",
     "bad_file_format":  "File is incorrectly formatted",
     "bad_interp":       "Interpolation processing error",
+    "bad_sheet_name":   "Invalid sheet name",
     "pyplot_failure":   "Plotting failed to run properly",
 
     "unknown_error":    "Unknown error: "
@@ -20,7 +21,8 @@ def __get_future_date(base_date, additional_days):
     future_date = base_date + timedelta(additional_days)
     return future_date
 
-def plot_values(file_path, degree=2, extrapolated_days=0):
+
+def plot_values(file_path, sheet_name, degree=2, extrapolated_days=1):
     dates = []
     totals = []
 
@@ -29,8 +31,11 @@ def plot_values(file_path, degree=2, extrapolated_days=0):
     except openpyxl.utils.exceptions.InvalidFileException:
         raise Exception(error_string["bad_file_name"])
 
-    # TODO need to pass in sheet name
-    sheet = wb.get_sheet_by_name('Sheet1')
+    try:
+        sheet = wb.get_sheet_by_name(sheet_name)
+    except:
+        e = sys.exc_info()[0]
+        raise Exception(error_string["bad_sheet_name"] + str(e))
 
     try:
         for i in range(2, sheet.max_row):

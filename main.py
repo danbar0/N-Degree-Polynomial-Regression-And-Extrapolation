@@ -33,12 +33,16 @@ class SelectionMenu(FloatLayout):
     def __init__(self, **kwargs):
         super(SelectionMenu, self).__init__(**kwargs)
         self.source_file_path = ""
-        self.days_to_extrapolate = 0
+        self.sheet_name = ""
+        self.days_to_extrapolate = 1
         self.target_net_worth = 0
         self.polynomial_degree = 0
 
     def poly_degree(self, widget, message, *args):
         widget.text = message[2]
+
+    def set_sheet_name(self, name=""):
+        self.sheet_name = name
 
     def set_selected_file(self, *args):
         try:
@@ -49,14 +53,14 @@ class SelectionMenu(FloatLayout):
             pass
 
     def launch_plotting(self):
-        # todo Make feature that lets user enter target net worth
         self.source_file_path = 'C:/Users/Dan/Dropbox/Savings.xlsx'
-        # plot_values(file_path, extrapolated_days=365*5)
+
         try:
             if self.source_file_path is not "":
-                plot_values(self.source_file_path, extrapolated_days=self.days_to_extrapolate)
+                plot_values(self.source_file_path, self.sheet_name, extrapolated_days=self.days_to_extrapolate)
             else:
                 MessagePopup.create_popup_with_text("Please select a source file before running")
+
         except Exception as e:
             MessagePopup.create_popup_with_text("Error: " + str(e))
 
