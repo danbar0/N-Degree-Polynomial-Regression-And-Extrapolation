@@ -4,20 +4,15 @@
 
 <SelectionMenu>:
     FloatLayout:
-        Image:
-            id: backgroundImage
-            source: 'background.png'
-            size: self.texture_size
-
         Label:
             id: directionsString
+            font_size: 20
             text: "Set parameters and select a source file"
-            pos_hint: {'center_x': 0.2, 'center_y': 0.95}
+            pos_hint: {'center_x': 0.25, 'center_y': 0.9}
 
         Button:
             id: launchButton
-            pos: (20, 20)
-            #pos_hint: {'x':.2, 'y':.2}
+            pos_hint: {'center_x':.25, 'center_y':.1}
             size_hint:  .47, .1
             text:       'Run'
             on_release: root.launch_plotting()
@@ -36,7 +31,7 @@
 
         Label:
             id: extrapolationEntryLabel
-            text: "Extrapolated days:"
+            text: "Days to extrapolate:"
             pos_hint: {'center_x': 0.1, 'center_y': 0.3}
 
         TextInput:
@@ -51,6 +46,7 @@
             size_hint:      0.5, 1
             pos_hint:       {'center_x': 0.75, 'center_y': 0.5}
             on_selection:   root.set_selected_file(*args)
+
 
 <MessagePopup>:
     title: 'Message'
@@ -79,6 +75,13 @@
             on_release: root.dismiss()
 
 <RootWidget>:
+    canvas.before:
+        Color:
+            rgb: 0, 0, 0
+        Rectangle:
+            pos: self.pos
+            size: self.size
+
     FloatLayout:
         size: root.size
         pos: root.pos

@@ -11,6 +11,7 @@ from kivy.lang import Builder
 from extrapolation import plot_values
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
+kivy.config.Config.set('graphics','resizable', False)
 
 
 Builder.load_file('kivySource.kv')
@@ -84,6 +85,7 @@ class RootWidget(Widget):
 
 class DemoApp(App):
     def build(self):
+        Window.size = (1000, 800)
         return RootWidget()
 
 
