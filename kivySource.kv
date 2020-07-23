@@ -23,12 +23,12 @@
             id: sheetEntryLabel
             font_size: 18
             text: "Excel sheet name:"
-            pos_hint: {'center_x': 0.1, 'center_y': 0.55}
+            pos_hint: {'center_x': 0.1, 'center_y': 0.8}
 
         TextInput:
             id: sheetField
             multiline: False
-            pos_hint: {'_x': 0.2, 'center_y': 0.5}
+            pos_hint: {'_x': 0.2, 'center_y': 0.75}
             size_hint: 0.5, 0.05
             on_text: root.set_sheet_name(sheetField.text)
 
@@ -36,14 +36,27 @@
             id: extrapolationEntryLabel
             font_size: 18
             text: "Days to extrapolate:"
-            pos_hint: {'center_x': 0.1, 'center_y': 0.3}
+            pos_hint: {'center_x': 0.1, 'center_y': 0.6}
 
         TextInput:
             id: exrapolationDaysField
             multiline: False
-            pos_hint: {'_x': 0.4, 'center_y': 0.25}
+            pos_hint: {'_x': 0.4, 'center_y': 0.55}
             size_hint: 0.5, 0.05
             on_text: root.set_days_to_extrapolate(exrapolationDaysField.text)
+
+        Label:
+            id: degreeLabel
+            font_size: 18
+            text: "Polynomial Degree:"
+            pos_hint: {'center_x': 0.1, 'center_y': 0.4}
+
+        TextInput:
+            id: degreeField
+            multiline: False
+            pos_hint: {'_x': 0.4, 'center_y': 0.35}
+            size_hint: 0.5, 0.05
+            on_text: root.set_degree(degreeField.text)
 
         FileChooserListView:
             id: filePathChooser

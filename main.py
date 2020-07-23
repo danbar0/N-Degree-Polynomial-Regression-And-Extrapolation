@@ -36,7 +36,7 @@ class SelectionMenu(FloatLayout):
         self.sheet_name = ""
         self.days_to_extrapolate = 1
         self.target_net_worth = 0
-        self.polynomial_degree = 0
+        self.polynomial_degree = 2
 
     def poly_degree(self, widget, message, *args):
         widget.text = message[2]
@@ -59,21 +59,31 @@ class SelectionMenu(FloatLayout):
         try:
             if self.source_file_path is not "":
                 print(self.sheet_name)
-                plot_values(self.source_file_path, self.sheet_name, extrapolated_days=self.days_to_extrapolate)
+                plot_values(self.source_file_path, self.sheet_name, degree=self.polynomial_degree, extrapolated_days=self.days_to_extrapolate)
             else:
                 MessagePopup.create_popup_with_text("Please select a source file before running")
 
         except Exception as e:
             MessagePopup.create_popup_with_text("Error: " + str(e))
 
+    def set_degree(self, degree='2'):
+        if degree == '':
+            return
+
+        if 1 >= int(degree) < 10:
+            print(degree)
+            self.polynomial_degree = int(degree)
+        else:
+            MessagePopup.create_popup_with_text("Degree is limited to a value of 10 and cannot be negative")
+
     def set_days_to_extrapolate(self, days='10'):
         if days == '':
             return
 
-        if int(days) < 36500:
+        if 1 >= int(days) < 36500:
             self.days_to_extrapolate = int(days)
         else:
-            MessagePopup.create_popup_with_text("Future date must be less than 100 years from now")
+            MessagePopup.create_popup_with_text("Future date must be less than 100 years from now and greater than 0")
 
     def set_target_net_worth(self, target):
         self.target_net_worth = target
