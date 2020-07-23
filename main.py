@@ -11,8 +11,7 @@ from kivy.lang import Builder
 from extrapolation import plot_values
 from kivy.uix.textinput import TextInput
 from kivy.core.window import Window
-kivy.config.Config.set('graphics','resizable', False)
-
+from kivy.config import Config
 
 Builder.load_file('kivySource.kv')
 
@@ -43,6 +42,7 @@ class SelectionMenu(FloatLayout):
         widget.text = message[2]
 
     def set_sheet_name(self, name=""):
+        print(name)
         self.sheet_name = name
 
     def set_selected_file(self, *args):
@@ -58,6 +58,7 @@ class SelectionMenu(FloatLayout):
 
         try:
             if self.source_file_path is not "":
+                print(self.sheet_name)
                 plot_values(self.source_file_path, self.sheet_name, extrapolated_days=self.days_to_extrapolate)
             else:
                 MessagePopup.create_popup_with_text("Please select a source file before running")
@@ -90,4 +91,6 @@ class DemoApp(App):
 
 
 if __name__ == '__main__':
+    Config.set('graphics', 'resizable', False)
+
     DemoApp().run()

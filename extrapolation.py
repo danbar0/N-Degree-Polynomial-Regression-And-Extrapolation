@@ -27,18 +27,19 @@ def plot_values(file_path, sheet_name, degree=2, extrapolated_days=1):
     totals = []
 
     try:
+        print(file_path)
         wb = openpyxl.load_workbook(file_path)
     except openpyxl.utils.exceptions.InvalidFileException:
         raise Exception(error_string["bad_file_name"])
 
     try:
-        sheet = wb.get_sheet_by_name(sheet_name)
-    except:
-        e = sys.exc_info()[0]
-        raise Exception(error_string["bad_sheet_name"] + str(e))
+        print(sheet_name)
+        sheet = wb.get_sheet_by_name(str(sheet_name))
+    except KeyError:
+        raise Exception(error_string["bad_sheet_name"])
 
     try:
-        for i in range(2, sheet.max_row):
+        for i in range(2, sheet.max_row+1):
             temp = sheet.cell(row=i, column=1).value
             dates.append(temp.date())
             totals.append(sheet.cell(row=i, column=2).value)

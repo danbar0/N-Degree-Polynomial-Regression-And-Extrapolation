@@ -3,6 +3,8 @@
 #:import TextInput kivy.uix.textinput
 
 <SelectionMenu>:
+    directionsString: directionsString
+
     FloatLayout:
         Label:
             id: directionsString
@@ -19,6 +21,7 @@
 
         Label:
             id: sheetEntryLabel
+            font_size: 18
             text: "Excel sheet name:"
             pos_hint: {'center_x': 0.1, 'center_y': 0.55}
 
@@ -27,10 +30,11 @@
             multiline: False
             pos_hint: {'_x': 0.2, 'center_y': 0.5}
             size_hint: 0.5, 0.05
-            on_text_validate: root.set_sheet_name(sheetField.text)
+            on_text: root.set_sheet_name(sheetField.text)
 
         Label:
             id: extrapolationEntryLabel
+            font_size: 18
             text: "Days to extrapolate:"
             pos_hint: {'center_x': 0.1, 'center_y': 0.3}
 
@@ -39,7 +43,7 @@
             multiline: False
             pos_hint: {'_x': 0.4, 'center_y': 0.25}
             size_hint: 0.5, 0.05
-            on_text_validate: root.set_days_to_extrapolate(exrapolationDaysField.text)
+            on_text: root.set_days_to_extrapolate(exrapolationDaysField.text)
 
         FileChooserListView:
             id: filePathChooser
