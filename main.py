@@ -22,11 +22,19 @@ class MessagePopup(Popup):
     def __init__(self, message="null", **kwargs):
         super(MessagePopup, self).__init__(**kwargs)
         self.message_text = message
+        self.popup_open = False
 
-    @staticmethod
-    def create_popup_with_text(message):
-        popup = MessagePopup(message)
-        popup.open()
+    def dismiss_event(self):
+        self.dismiss()
+        self.popup_open = False
+
+    def create_popup_with_text(self, message):
+        if self.popup_open is True:
+            return
+
+        self.message_text = message
+        self.open()
+        self.popup_open = True
 
 
 class SelectionMenu(FloatLayout):
@@ -37,6 +45,7 @@ class SelectionMenu(FloatLayout):
         self.days_to_extrapolate = 1
         self.target_net_worth = 0
         self.polynomial_degree = 2
+        self.popup = MessagePopup("null")
 
     def poly_degree(self, widget, message, *args):
         widget.text = message[2]
@@ -61,29 +70,29 @@ class SelectionMenu(FloatLayout):
                 print(self.sheet_name)
                 plot_values(self.source_file_path, self.sheet_name, degree=self.polynomial_degree, extrapolated_days=self.days_to_extrapolate)
             else:
-                MessagePopup.create_popup_with_text("Please select a source file before running")
+                self.popup.create_popup_with_text("Please select a source file before running")
 
         except Exception as e:
-            MessagePopup.create_popup_with_text("Error: " + str(e))
+            self.popup.create_popup_with_text("Error: " + str(e))
 
     def set_degree(self, degree='2'):
         if degree == '':
             return
 
-        if 1 >= int(degree) < 10:
+        if 1 <= int(degree) < 100:
             print(degree)
             self.polynomial_degree = int(degree)
         else:
-            MessagePopup.create_popup_with_text("Degree is limited to a value of 10 and cannot be negative")
+            self.popup.create_popup_with_text("Degree is limited to a value of 100 and cannot be negative")
 
     def set_days_to_extrapolate(self, days='10'):
         if days == '':
             return
 
-        if 1 >= int(days) < 36500:
+        if 1 <= int(days) < 36500:
             self.days_to_extrapolate = int(days)
         else:
-            MessagePopup.create_popup_with_text("Future date must be less than 100 years from now and greater than 0")
+            self.popup.create_popup_with_text("Future date must be less than 100 years from now and greater than 0")
 
     def set_target_net_worth(self, target):
         self.target_net_worth = target
@@ -97,6 +106,8 @@ class RootWidget(Widget):
 class DemoApp(App):
     def build(self):
         Window.size = (1000, 800)
+        self.title = "Regression And Extrapolation"
+
         return RootWidget()
 
 

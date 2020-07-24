@@ -16,7 +16,7 @@
             id: launchButton
             pos_hint: {'center_x':.25, 'center_y':.1}
             size_hint:  .47, .1
-            text:       'Run'
+            text:       'Go'
             on_release: root.launch_plotting()
 
         Label:
@@ -89,7 +89,7 @@
             text: 'Close'
             size_hint: 0.8, 0.2
             pos_hint: {'x': 0.1, 'y': 0.1}
-            on_release: root.dismiss()
+            on_release: root.dismiss_event()
 
 <RootWidget>:
     canvas.before:
