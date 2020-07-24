@@ -14,7 +14,7 @@ from kivy.core.window import Window
 from kivy.config import Config
 
 Builder.load_file('kivySource.kv')
-
+DEBUG = False
 
 class MessagePopup(Popup):
     message_text = StringProperty()
@@ -28,7 +28,7 @@ class MessagePopup(Popup):
         self.dismiss()
         self.popup_open = False
 
-    def create_popup_with_text(self, message):
+    def open_with_text(self, message):
         if self.popup_open is True:
             return
 
@@ -63,17 +63,18 @@ class SelectionMenu(FloatLayout):
             pass
 
     def launch_plotting(self):
-        self.source_file_path = 'C:/Users/Dan/Dropbox/Savings.xlsx'
+        if DEBUG is True:
+            self.source_file_path = 'C:/Users/Dan/Dropbox/Savings.xlsx'
 
         try:
             if self.source_file_path is not "":
                 print(self.sheet_name)
                 plot_values(self.source_file_path, self.sheet_name, degree=self.polynomial_degree, extrapolated_days=self.days_to_extrapolate)
             else:
-                self.popup.create_popup_with_text("Please select a source file before running")
+                self.popup.open_with_text("Please select a source file before running")
 
         except Exception as e:
-            self.popup.create_popup_with_text("Error: " + str(e))
+            self.popup.open_with_text("Error: " + str(e))
 
     def set_degree(self, degree='2'):
         if degree == '':
@@ -83,7 +84,7 @@ class SelectionMenu(FloatLayout):
             print(degree)
             self.polynomial_degree = int(degree)
         else:
-            self.popup.create_popup_with_text("Degree is limited to a value of 100 and cannot be negative")
+            self.popup.open_with_text("Degree is limited to a value of 100 and cannot be negative")
 
     def set_days_to_extrapolate(self, days='10'):
         if days == '':
@@ -92,7 +93,7 @@ class SelectionMenu(FloatLayout):
         if 1 <= int(days) < 36500:
             self.days_to_extrapolate = int(days)
         else:
-            self.popup.create_popup_with_text("Future date must be less than 100 years from now and greater than 0")
+            self.popup.open_with_text("Future date must be less than 100 years from now and greater than 0")
 
     def set_target_net_worth(self, target):
         self.target_net_worth = target
