@@ -39,7 +39,7 @@ def plot_values(file_path, sheet_name, degree=2, extrapolated_days=1):
         raise Exception(error_string["bad_sheet_name"])
 
     try:
-        for i in range(2, sheet.max_row+1):
+        for i in range(2, sheet.max_row):
             temp = sheet.cell(row=i, column=1).value
             dates.append(temp.date())
             totals.append(sheet.cell(row=i, column=2).value)
@@ -52,7 +52,6 @@ def plot_values(file_path, sheet_name, degree=2, extrapolated_days=1):
         raise Exception(error_string["unknown_error"] + str(e))
 
     try:
-        print(totals)
         x_data = mdates.date2num(dates)
         y_data = totals
 
@@ -61,6 +60,7 @@ def plot_values(file_path, sheet_name, degree=2, extrapolated_days=1):
         f = np.poly1d(polynomial_coefficients)
 
         fig, cx = plt.subplots()
+        difference = 0
 
         if extrapolated_days > 0:
             future_date = mdates.date2num(__get_future_date(dates[-1], extrapolated_days))

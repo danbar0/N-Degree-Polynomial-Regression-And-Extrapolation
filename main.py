@@ -63,9 +63,6 @@ class SelectionMenu(FloatLayout):
             pass
 
     def launch_plotting(self):
-        if DEBUG is True:
-            self.source_file_path = 'C:/Users/Dan/Dropbox/Savings.xlsx'
-
         try:
             if self.source_file_path is not "":
                 print(self.sheet_name)
